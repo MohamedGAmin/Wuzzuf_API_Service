@@ -49,12 +49,14 @@ public class Joinery_DataFrame {
         System.out.println(this.df.groupBy(4).count().sortBy("-Title").retain("Level", "Count").head(5));
     }
 
-    public void checkNulls(){
-        System.out.println(this.df.isnull().groupBy(0).count());
+    public String checkNulls(){
+        DataFrame newdf = this.df.isnull().groupBy(0).count();
+        return dataFrame_toString(newdf);
     }
 
-    public void checkDuplicity(){
-        System.out.println(this.df.unique(0, 1, 2, 3, 4, 5, 6, 7, 8));
+    public String checkDuplicity(){
+        DataFrame newdf = this.df.unique(0, 1, 2, 3, 4, 5, 6, 7, 8);
+        return dataFrame_toString(newdf.head(10));
     }
 
     public String jobs_per_company(){
