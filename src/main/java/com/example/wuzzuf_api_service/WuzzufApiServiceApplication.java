@@ -223,7 +223,7 @@ public class WuzzufApiServiceApplication {
                 "\n" +
                 "</body>\n" +
                 "</html> ");
-        return df.popular_skills();
+        return buf.toString();
     }
 }
 
