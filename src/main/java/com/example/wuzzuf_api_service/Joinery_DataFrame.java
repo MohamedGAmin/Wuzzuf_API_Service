@@ -64,7 +64,7 @@ public class Joinery_DataFrame {
         return dataFrame_toString(newdf);
     }
 
-    public void company_pieChart(){
+    public void company_pieChart() throws IOException {
         DataFrame newdf = this.df.groupBy(1).count().sortBy("-Type").retain("Company", "Count").head(20);
         List<String> company = newdf.col(0);
         List<Integer> count = newdf.col(1);
@@ -78,7 +78,8 @@ public class Joinery_DataFrame {
         }
 
         chart.getStyler().setHasAnnotations(true);
-        new SwingWrapper(chart).displayChart();
+        //new SwingWrapper(chart).displayChart();
+        BitmapEncoder.saveJPGWithQuality(chart, "./src/main/resources/static/company_demand.jpg", 0.95f);
     }
 
     public String job_demand(){
@@ -103,11 +104,12 @@ public class Joinery_DataFrame {
         BitmapEncoder.saveJPGWithQuality(chart, "./src/main/resources/static/job_demand.jpg", 0.95f);
     }
 
-    public void popular_areas(){
-        System.out.println(this.df.groupBy(2).count().sortBy("-Title").retain("Location", "Count").head(5));
+    public String popular_areas(){
+        DataFrame newdf = this.df.groupBy(2).count().sortBy("-Title").retain("Location", "Count").head(5);
+        return dataFrame_toString(newdf);
     }
 
-    public void area_barChart(){
+    public void area_barChart() throws IOException {
         DataFrame newdf = this.df.groupBy(2).count().sortBy("-Type").retain("Location", "Count").head(5);
         List<String> area = newdf.col(0);
         List<Integer> count = newdf.col(1);
@@ -119,18 +121,70 @@ public class Joinery_DataFrame {
                 .build();
         chart.addSeries(" ", area, count);
         chart.getStyler().setHasAnnotations(true);
-        new SwingWrapper(chart).displayChart();
+        //new SwingWrapper(chart).displayChart();
+        BitmapEncoder.saveJPGWithQuality(chart, "./src/main/resources/static/area_demand.jpg", 0.95f);
     }
 
-    public void popular_skills(){
+    public String popular_skills(){
         List<String> skills = ((List<String> )this.df.col(7).stream().flatMap(a-> Arrays.stream(a.toString().split(","))).collect(Collectors.toList()));
         Map<String, Integer> map_1 = new HashMap<>();
         skills.stream().forEach(a->map_1.put(a, (map_1.get(a)==null)? 1: map_1.get(a)+1));
         List<Map.Entry> skillCount = map_1.entrySet().stream().sorted((a, b)->b.getValue()-a.getValue()).collect(Collectors.toList());
 
-        for(int i = 0; i < 10; i++){
-            System.out.println(skillCount.get(i));
+        StringBuilder buf = new StringBuilder();
+        buf.append("<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>");
+        buf.append("<style>\n" +
+                "#customers {\n" +
+                "  font-family: Arial, Helvetica, sans-serif;\n" +
+                "  border-collapse: collapse;\n" +
+                "  width: 100%;\n" +
+                "}\n" +
+                "\n" +
+                "#customers td, #customers th {\n" +
+                "  border: 1px solid #ddd;\n" +
+                "  padding: 8px;\n" +
+                "}\n" +
+                "\n" +
+                "#customers tr:nth-child(even){background-color: #f2f2f2;}\n" +
+                "\n" +
+                "#customers tr:hover {background-color: #ddd;}\n" +
+                "\n" +
+                "#customers th {\n" +
+                "  padding-top: 12px;\n" +
+                "  padding-bottom: 12px;\n" +
+                "  text-align: left;\n" +
+                "  background-color: #04AA6D;\n" +
+                "  color: white;\n" +
+                "}\n" +
+                "</style>");
+        buf.append("</head>\n" +
+                "<body>\n" +
+                "\n" +
+                "<table id=\"customers\">\n" +
+                "  <tr>");
+        buf.append("<th>");
+        buf.append("Skills");
+        buf.append("</th>");
+        buf.append("<th>");
+        buf.append("Count");
+        buf.append("</th>");
+        buf.append("</tr>");
+        for(int i = 0; i < 15; i++) {
+            buf.append("<tr>");
+            buf.append("<td>");
+            buf.append(skillCount.get(i).getKey().toString());
+            buf.append("</td>");
+            buf.append("<td>");
+            buf.append(skillCount.get(i).getValue().toString());
+            buf.append("</td>");
+            buf.append("</tr>");
         }
+        buf.append("</table>" +
+                "</body>" +
+                "</html>");
+        return buf.toString();
     }
 
     private String dataFrame_toString(DataFrame df){
