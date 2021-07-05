@@ -38,7 +38,7 @@ public class WuzzufApiServiceApplication {
                 "</head>\n" +
                 "<body>\n" +
                 "\n" +
-                "<h1>Checking for Nulls</h1>\n" +
+                "<h1>Checking for nulls</h1>\n" +
                 df.checkNulls()+"\n\n"+
                 "<h1>Data after eliminating duplicates</h1>\n" +
                 "<p>Data length with duplicates = " + df.df.length() + "</p>\n"+
@@ -48,6 +48,52 @@ public class WuzzufApiServiceApplication {
                 "\n" +
                 "</body>\n" +
                 "</html> ";
+    }
+
+    // Requirement 4: Count the jobs for each company and display that in order.
+    @GetMapping("/Fourth Method")
+    public String display_most_demanding_companies() throws IOException {
+        String path = "Wuzzuf_Jobs.csv";
+        Joinery_DataFrame df = new Joinery_DataFrame(path);
+        StringBuilder buf = new StringBuilder();
+        buf.append(" <!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "  <title>Cleaning Data</title>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "\n" +
+                "<h1>Job demand for each company</h1>\n" +
+                df.job_demand() +
+                "\n" +
+                "</body>\n" +
+                "</html> ");
+        return buf.toString();
+    }
+
+    // Requirement 5: Show step 4 in a pie chart.
+    @GetMapping("/Fifth Method")
+    public String show_job_demand_barChart() throws IOException {
+        String path = "Wuzzuf_Jobs.csv";
+        Joinery_DataFrame df = new Joinery_DataFrame(path);
+        df.job_demand_barChart();
+        StringBuilder buf = new StringBuilder();
+        buf.append(" <!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "  <title>Cleaning Data</title>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "\n" +
+                "<h1>Job demand for each company</h1>\n" +
+                df.job_demand() +
+                "\n" +
+                "<h3> Job Demand Bar Chart </h3>"+
+                "<img src=\"job_demand.jpg\">"+
+                "\n"+
+                "</body>\n" +
+                "</html> ");
+        return buf.toString();
     }
 
 }

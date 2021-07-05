@@ -86,7 +86,7 @@ public class Joinery_DataFrame {
         return dataFrame_toString(newdf);
     }
 
-    public void job_demand_barChart(){
+    public void job_demand_barChart() throws IOException {
         DataFrame newdf = this.df.groupBy(0).count().sortBy("-Type").retain("Title", "Count").head(5);
         List<String> title = newdf.col(0);
         List<Integer> count = newdf.col(1);
@@ -98,7 +98,9 @@ public class Joinery_DataFrame {
                 .build();
         chart.addSeries(" ", title, count);
         chart.getStyler().setHasAnnotations(true);
-        new SwingWrapper(chart).displayChart();
+        //new SwingWrapper(chart).displayChart();
+        //BitmapEncoder.saveBitmapWithDPI(chart, "./job_demand", BitmapEncoder.BitmapFormat.PNG, 300);
+        BitmapEncoder.saveJPGWithQuality(chart, "./src/main/resources/static/job_demand.jpg", 0.95f);
     }
 
     public void popular_areas(){
