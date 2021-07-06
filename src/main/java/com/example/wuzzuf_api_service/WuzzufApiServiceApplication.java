@@ -37,7 +37,29 @@ public class WuzzufApiServiceApplication {
     }
 
     // Requirement 2: Display structure and summary of the data.
-
+    @GetMapping("/Second Method")
+    public String display_summary_and_structure() throws IOException {
+        String path = "Wuzzuf_Jobs.csv";
+        Joinery_DataFrame df = new Joinery_DataFrame(path);
+        StringBuilder buf = new StringBuilder();
+        buf.append(" <!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "  <title>Summary and Structure</title>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "\n" +
+                "<h1>Dataset Features</h1>\n" +
+                df.df.columns().toString()+"\n"+
+                "<h1>Dataset Rows</h1>\n" +
+                "<p>Number of Rows = " + df.df.length() + "</p>\n"+
+                "\n"+
+                "<p>Number of Columns = " + df.df.size() + "</p>\n"+
+                "\n" +
+                "</body>\n" +
+                "</html> ");
+        return buf.toString();
+    }
 
     // Requirement 3: Clean the data (null, duplications).
     @GetMapping("/Third Method")
@@ -58,7 +80,7 @@ public class WuzzufApiServiceApplication {
                 "<p>Data length with duplicates = " + df.df.length() + "</p>\n"+
                 "\n"+
                 "<p>Data length without duplicates = " + df.checkDuplicity().length() + "</p>\n"+
-                df.checkDuplicity()+"\n" +
+                df.dataFrame_toString(df.checkDuplicity().head(10))+"\n" +
                 "\n" +
                 "</body>\n" +
                 "</html> ");
@@ -125,7 +147,7 @@ public class WuzzufApiServiceApplication {
                 "<body>\n" +
                 "\n" +
                 "<h1>Job Titles Demand</h1>\n" +
-                df.jobs_per_company() +
+                df.job_demand() +
                 "\n" +
                 "</body>\n" +
                 "</html> ");

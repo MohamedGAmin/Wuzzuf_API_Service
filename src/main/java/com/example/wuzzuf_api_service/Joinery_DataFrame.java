@@ -54,9 +54,9 @@ public class Joinery_DataFrame {
         return dataFrame_toString(newdf);
     }
 
-    public String checkDuplicity(){
+    public DataFrame checkDuplicity(){
         DataFrame newdf = this.df.unique(0, 1, 2, 3, 4, 5, 6, 7, 8);
-        return dataFrame_toString(newdf.head(10));
+        return newdf;
     }
 
     public String jobs_per_company(){
@@ -187,7 +187,7 @@ public class Joinery_DataFrame {
         return buf.toString();
     }
 
-    private String dataFrame_toString(DataFrame df){
+    public String dataFrame_toString(DataFrame df){
         StringBuilder buf = new StringBuilder();
         buf.append("<!DOCTYPE html>\n" +
                 "<html>\n" +
